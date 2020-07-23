@@ -119,5 +119,8 @@ public:
 	void AddTicket(const Ticket& ticket);
 	void AddConnectionFlight(const ConnectionFlight& connectionFlight);
 	bool RemoveTicket(TicketType type);
+	bool IsAvailable(TicketType type)const;
+	list<Ticket> GetTickets()const;
+	list<ConnectionFlight> GetConnectionFlights()const;
 	void Print()const;
 };

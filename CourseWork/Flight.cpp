@@ -65,7 +65,6 @@ void Flight::AddConnectionFlight(const ConnectionFlight& connectionFlight)
 {
 	connectionFlights.push_back(connectionFlight);
 }
-
 bool Flight::RemoveTicket(TicketType type)
 {
 	for (auto i : tickets)
@@ -78,7 +77,25 @@ bool Flight::RemoveTicket(TicketType type)
 	}
 	return false;
 }
-
+bool Flight::IsAvailable(TicketType type) const
+{
+	for (auto i : tickets)
+	{
+		if (i.getType() == type)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+list<Ticket> Flight::GetTickets() const
+{
+	return tickets;
+}
+list<ConnectionFlight> Flight::GetConnectionFlights() const
+{
+	return connectionFlights;
+}
 void Flight::Print() const
 {
 	cout << "\< - - - - - - - - - - - \>" << endl;
