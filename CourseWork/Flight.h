@@ -2,24 +2,30 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <fstream>
 #include <ctime>
 using namespace std;
+#pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
+
 struct Date
 {
+	std::time_t t = std::time(0);   // get time now
+	std::tm* now = std::localtime(&t);
 	int hours;
 	int minutes;
 	int day;
 	int month;
 	int year;
-	time_t t = time(0);   // get time now
-	tm* now = localtime(&t);
 	int temp = 0;
 	Date();
 	void SetYear();
 	void SetMonth();
 	void SetDay();
 	bool operator<(const Date& other);
+	bool operator==(const Date& other);
 	void Print()const;
+	friend ofstream& operator<<(ofstream& ofs, const Date& date);
+	friend ifstream& operator>>(ifstream& ifs, Date& date);
 };
 enum TicketType
 {
@@ -28,6 +34,8 @@ enum TicketType
 	BUSINESS,
 	FIRST
 };
+//ofstream& operator<<(ofstream& ofs, const TicketType& type);
+ifstream& operator>>(ifstream& ifs, TicketType& type);
 class Ticket
 {
 private:
@@ -44,7 +52,10 @@ public:
 	TicketType getType();
 	float getValue();
 	bool getPossibleToReturn();
+	bool operator==(const Ticket& other);
 	void Print()const;
+	friend ofstream& operator<<(ofstream& ofs, const Ticket& ticket);
+	friend ifstream& operator>>(ifstream& ifs, Ticket& ticket);
 };
 class ConnectionFlight
 {
@@ -61,7 +72,10 @@ public:
 	string GetCity()const;
 	Date GetDepartureTime()const;
 	Date GetArriveTime()const;
+	bool operator==(const ConnectionFlight& other);
 	void Print()const;
+	friend ofstream& operator<<(ofstream& ofs, const ConnectionFlight& connectionFlight);
+	friend ifstream& operator>>(ifstream& ifs, ConnectionFlight& connectionFlight);
 };
 class Flight
 {
@@ -120,7 +134,10 @@ public:
 	void AddConnectionFlight(const ConnectionFlight& connectionFlight);
 	bool RemoveTicket(TicketType type);
 	bool IsAvailable(TicketType type)const;
+	bool operator==(const Flight& other);
 	list<Ticket> GetTickets()const;
 	list<ConnectionFlight> GetConnectionFlights()const;
 	void Print()const;
+	friend ofstream& operator<<(ofstream& ofs, const Flight& flight);
+	friend ifstream& operator>>(ifstream& ifs, Flight& flight);
 };

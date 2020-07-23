@@ -6,6 +6,12 @@ void Ticket::setPossibleToReturn(bool possibleToReturn){ this->possibleToReturn 
 TicketType Ticket::getType(){ return type; }
 float Ticket::getValue(){ return value; }
 bool Ticket::getPossibleToReturn() { return possibleToReturn; }
+bool Ticket::operator==(const Ticket& other)
+{
+	return (this->type == other.type
+		&& this->value == other.value
+		&& this->possibleToReturn == other.possibleToReturn);
+}
 void Ticket::Print() const
 {
 	cout << "\< - - - - - - - - - - - \>" << endl;
@@ -28,6 +34,12 @@ void ConnectionFlight::setTime(Date departure, Date arrive)
 string ConnectionFlight::GetCity() const { return city; }
 Date ConnectionFlight::GetDepartureTime() const { return departure; }
 Date ConnectionFlight::GetArriveTime() const { return arrive; }
+bool ConnectionFlight::operator==(const ConnectionFlight& other)
+{
+	return (this->city == other.city
+		&& this->departure == other.departure
+		&& this->arrive == other.arrive);
+}
 void ConnectionFlight::Print() const
 {
 	cout << "\< - - - - - - - - - - - \>" << endl;
@@ -37,8 +49,6 @@ void ConnectionFlight::Print() const
 	cout << "Connection flight arrive time: ";
 	arrive.Print();
 }
-
-
 
 
 
@@ -65,13 +75,14 @@ void Flight::AddConnectionFlight(const ConnectionFlight& connectionFlight)
 {
 	connectionFlights.push_back(connectionFlight);
 }
+//**********************
 bool Flight::RemoveTicket(TicketType type)
 {
 	for (auto i : tickets)
 	{
 		if (i.getType() == type)
 		{
-			tickets.remove(i);
+			//tickets.remove(i);
 			return true;
 		}
 	}
@@ -87,6 +98,17 @@ bool Flight::IsAvailable(TicketType type) const
 		}
 	}
 	return false;
+}
+bool Flight::operator==(const Flight& other)
+{
+	return (this->name == other.name
+		&& this->company == other.company
+		&& this->departureCity == other.departureCity
+		&& this->arrivalCity == other.arrivalCity
+		&& this->departure == other.departure
+		&& this->arrive == other.arrive
+		&& this->tickets.begin() == other.tickets.begin()
+		&& this->connectionFlights.begin() == other.connectionFlights.begin());
 }
 list<Ticket> Flight::GetTickets() const
 {
@@ -128,7 +150,7 @@ void Date::SetYear()
 {
 	cout << "Enter year: ";
 	cin >> temp;
-	if (year < now->tm_year)
+	if (year < (now->tm_year+1900))
 	{
 		cout << "Invalid year!" << endl;
 		SetYear();
@@ -143,7 +165,7 @@ void Date::SetMonth()
 {
 	cout << "Enter month: ";
 	cin >> temp;
-	if ((year == 2020 && temp < now->tm_mon) || temp > 12)
+	if ((year == 2020 && temp < (now->tm_mon+1)) || temp > 12)
 	{
 		cout << "Invalid month!" << endl;
 		SetMonth();
@@ -195,4 +217,121 @@ bool Date::operator<(const Date& other)
 void Date::Print() const
 {
 	cout << hours << "\:" << minutes << "  " << day << "\/" << month << "\/" << year << endl;
+}
+
+bool Date::operator==(const Date& other)
+{
+	return (this->hours == other.hours
+		&& this->minutes == other.minutes
+		&& this->day == other.day
+		&& this->month == other.minutes
+		&& this->year == other.year);
+}
+
+ofstream& operator<<(ofstream& ofs, const Date& date)
+{
+	ofs << date.hours << endl;
+	ofs << date.minutes << endl;
+	ofs << date.day << endl;
+	ofs << date.month << endl;
+	ofs << date.year << endl;
+	return ofs;
+}
+
+ifstream& operator>>(ifstream& ifs, Date& date)
+{
+	ifs >> date.hours;
+	ifs >> date.minutes;
+	ifs >> date.day;
+	ifs >> date.month;
+	ifs >> date.year;
+	return ifs;
+}
+
+//ofstream& operator<<(ofstream& ofs, const TicketType& type)
+//{
+//	ofs << type << endl;
+//	return ofs;
+//	// TODO: insert return statement here
+//}
+
+ifstream& operator>>(ifstream& ifs, TicketType& type)
+{
+	ifs >> type;
+	return ifs;
+}
+ofstream& operator<<(ofstream& ofs, const Ticket&ticket)
+{
+	ofs << ticket.type << endl;
+	ofs << ticket.value << endl;
+	ofs << ticket.possibleToReturn << endl;
+	return ofs;
+}
+ifstream& operator>>(ifstream& ifs, Ticket& ticket)
+{
+	ifs >> ticket.type;
+	ifs >> ticket.value;
+	ifs >> ticket.possibleToReturn;
+	return ifs;
+	// TODO: insert return statement here
+}
+ofstream& operator<<(ofstream& ofs, const ConnectionFlight& connectionFlight)
+{
+	ofs << connectionFlight.city << endl;
+	ofs << connectionFlight.departure << endl;
+	ofs << connectionFlight.arrive << endl;
+	return ofs;
+}
+ifstream& operator>>(ifstream& ifs, ConnectionFlight& connectionFlight)
+{
+	ifs >> connectionFlight.city;
+	ifs >> connectionFlight.departure;
+	ifs >> connectionFlight.arrive;
+	return ifs;
+}
+ofstream& operator<<(ofstream& ofs, const Flight& flight)
+{
+	ofs << flight.name << endl;
+	ofs << flight.company << endl;
+	ofs << flight.departureCity << endl;
+	ofs << flight.arrivalCity << endl;
+	ofs << flight.departure << endl;
+	ofs << flight.arrive << endl;
+	ofs << flight.tickets.size() << endl;
+	for (auto i : flight.tickets)
+	{
+		ofs << i << endl;
+	}
+	ofs << flight.connectionFlights.size() << endl;
+	for (auto i : flight.connectionFlights)
+	{
+		ofs << i << endl;
+	}
+	return ofs;
+}
+ifstream& operator>>(ifstream& ifs, Flight& flight)
+{
+	int a = 0;
+	int b = 0;
+	ifs >> flight.name;
+	ifs >> flight.company;
+	ifs >> flight.departureCity;
+	ifs >> flight.arrivalCity;
+	ifs >> flight.departure;
+	ifs >> flight.arrive;
+	ifs >> a;
+	Ticket ticket;
+	for (int i = 0; i < a; i++)
+	{
+		ifs >> ticket;
+		flight.tickets.push_back(ticket);
+	}
+	ifs >> b;
+	ConnectionFlight connectionFligth;
+	for (int i = 0; i < b; i++)
+	{
+		ifs >> connectionFligth;
+		flight.connectionFlights.push_back(connectionFligth);
+	}
+	return ifs;
 }

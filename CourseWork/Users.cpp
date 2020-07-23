@@ -4,7 +4,6 @@ void User::AddMoney(float money)
 {
 	this->money += money;
 }
-
 void User::SetPassword(string password)
 {
 	this->password = password;
@@ -19,6 +18,7 @@ bool User::IsCorrectPassword(string password)
 {
 	return this->password == password;
 }
+//************************************
 void User::SearchFlight(list<Flight>& list, int day, int month, int year, string departureCity, string arrivalCity)
 {
 	string choise;
@@ -48,7 +48,7 @@ void User::SearchFlight(list<Flight>& list, int day, int month, int year, string
 				} while (typeT != "e" && typeT != "e" && typeT != "f");
 				if (BuyTicket(i, typeT) == true)
 				{
-					list.remove(i);
+					//list.remove(i);
 				}
 			}
 		}
@@ -152,13 +152,22 @@ bool User::BuyTicket(Flight flight, string typeT)
 		return false;
 	}
 }
-
 bool UsersAdmins::IsAlreadyExist(string login)
 {
 	for (auto i : users)
 	{
 		if (i.GetLogin() == login)
 			return true;
+	}
+	return false;
+}
+bool UsersAdmins::AddUser(User user)
+{
+	if (IsAlreadyExist(user.GetLogin()) == false)
+	{
+		users.push_back(user);
+		//rewriteUsersFile();
+		return true;
 	}
 	return false;
 }

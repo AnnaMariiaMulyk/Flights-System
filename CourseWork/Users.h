@@ -12,10 +12,10 @@ public:
 	{
 		for (auto i : list)
 		{
-			if (i.GetArrivalCity() == arrivalCity 
-				&& i.GetDepartureCity() == departureCity 
-				&& i.GetDepartureDay() == day 
-				&& i.GetDepartureMonth() == month 
+			if (i.GetArrivalCity() == arrivalCity
+				&& i.GetDepartureCity() == departureCity
+				&& i.GetDepartureDay() == day
+				&& i.GetDepartureMonth() == month
 				&& i.GetDepartureYear() == year)
 			{
 				i.Print();
@@ -53,4 +53,8 @@ public:
 	UsersAdmins() :users() {}
 	bool IsAlreadyExist(string login);
 	bool AddUser(User user);
+	void RewriteUsersFile()
+	{
+		 
+	}
 };
