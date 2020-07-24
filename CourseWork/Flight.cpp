@@ -4,7 +4,6 @@ bool Ticket::IsValid(float value)
 {
 	return value > 0;
 }
-
 void Ticket::setType(TicketType type) {
 	this->type = type;
 }
@@ -93,7 +92,6 @@ bool Flight::RemoveTicket(TicketType type)
 	int count = 0;
 	for (auto i : tickets)
 	{
-		count++;
 		if (i.getType() == type)
 		{
 			list<Ticket>::iterator it;
@@ -101,6 +99,7 @@ bool Flight::RemoveTicket(TicketType type)
 			tickets.erase(it);
 			return true;
 		}
+		count++;
 	}
 	return false;
 }
@@ -293,7 +292,6 @@ ifstream& operator>>(ifstream& ifs, Ticket& ticket)
 	ifs >> ticket.value;
 	ifs >> ticket.possibleToReturn;
 	return ifs;
-	// TODO: insert return statement here
 }
 ofstream& operator<<(ofstream& ofs, const ConnectionFlight& connectionFlight)
 {
@@ -355,5 +353,4 @@ ifstream& operator>>(ifstream& ifs, Flight& flight)
 	}
 	return ifs;
 }
-
 

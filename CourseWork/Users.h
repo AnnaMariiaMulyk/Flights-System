@@ -68,6 +68,13 @@ private:
 	list<User> users;
 	list<Admin>admins;
 	list<Flight>flights;
+	void Clear()const
+	{
+		CLEAR;
+		cout << endl;
+		cout << endl;
+		cout << endl;
+	}
 public:
 	UsersAdmins() :users(), admins(), flights() {}
 	bool IsAlreadyExist(string login);

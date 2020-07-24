@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="Flight.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Users.cpp" />
   </ItemGroup>
   <ItemGroup>

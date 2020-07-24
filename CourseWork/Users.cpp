@@ -1,15 +1,14 @@
 #include "Users.h"
+#include <conio.h>
 
 bool User::IsValidMoney(float money) const
 {
 	return money > 1;
 }
-
 bool User::IsEmpty() const
 {
 	return myFlights.size() < 0;
 }
-
 void User::AddMoney(float money)
 {
 	if (IsValidMoney(money) == true)
@@ -42,7 +41,6 @@ void User::SearchFlight(list<Flight>& myList, int day, int month, int year, stri
 	int count = 0;
 	for (auto i : myList)
 	{
-		count++;
 		if (i.GetArrivalCity() == arrivalCity
 			&& i.GetDepartureCity() == departureCity
 			&& i.GetDepartureDay() == day
@@ -77,13 +75,14 @@ void User::SearchFlight(list<Flight>& myList, int day, int month, int year, stri
 				}
 			}
 		}
+		count++;
 	}
 }
 bool User::BuyTicket(Flight flight, string typeT)
 {
-	
+
 	TicketType type;
-	
+
 	if (typeT == "e")
 	{
 		type = ECONOM;
@@ -101,7 +100,6 @@ bool User::BuyTicket(Flight flight, string typeT)
 		int count = 0;
 		for (auto i : flight.GetTickets())
 		{
-			count++;
 			if (i.getType() == type)
 			{
 				cout << "\t\tValue of ticket is " << i.getType() << " \$" << endl;
@@ -110,7 +108,7 @@ bool User::BuyTicket(Flight flight, string typeT)
 					string temp;
 					cout << "\t\tEnter your password to continue: ";
 					cin >> temp;
-					
+
 					if (IsCorrectPassword(temp))
 					{
 						this->money -= i.getValue();
@@ -118,7 +116,7 @@ bool User::BuyTicket(Flight flight, string typeT)
 						temp.GetTickets().clear();
 						temp.GetTickets().push_back(i);
 						myFlights.push_back(temp);
-						flight.RemoveTicket(type); 
+						flight.RemoveTicket(type);
 						list<Ticket>::iterator it;
 						advance(it, count);
 						flight.GetTickets().erase(it);
@@ -126,7 +124,7 @@ bool User::BuyTicket(Flight flight, string typeT)
 					}
 					else
 					{
-						cout << "\t\tPassword is incorrect, please try again: "; 
+						cout << "\t\tPassword is incorrect, please try again: ";
 						cin >> temp;
 						if (!IsCorrectPassword(temp))
 						{
@@ -154,7 +152,7 @@ bool User::BuyTicket(Flight flight, string typeT)
 							cin >> moneyAdd;
 							AddMoney(moneyAdd);
 						} while (this->money < i.getValue());
-						this->money -= i.getValue(); 
+						this->money -= i.getValue();
 						string temp;
 						cout << "\t\tEnter your password to continue: ";
 						cin >> temp;
@@ -179,6 +177,7 @@ bool User::BuyTicket(Flight flight, string typeT)
 						return false;
 				}
 			}
+			count++;
 		}
 	}
 	else
@@ -204,7 +203,6 @@ bool User::DeleteTicket()
 	{
 		if (i.GetName() == name)
 		{
-			count++;
 			do
 			{
 				cout << "\t\tEnter ticket type: ";
@@ -221,10 +219,11 @@ bool User::DeleteTicket()
 					list<Flight>::iterator it;
 					advance(it, count);
 					myFlights.erase(it);
-					return true; 
+					return true;
 				}
 			}
 		}
+		count++;
 	}
 	return false;
 }
@@ -269,7 +268,6 @@ bool UsersAdmins::AddUser(User user)
 	if (IsAlreadyExist(user.GetLogin()) == false)
 	{
 		users.push_back(user);
-		//rewriteUsersFile();
 		return true;
 	}
 	return false;
@@ -279,12 +277,10 @@ bool UsersAdmins::AddAdmin(Admin admin)
 	if (IsAlreadyExist(admin.GetLogin()) == false)
 	{
 		admins.push_back(admin);
-		//rewriteUsersFile();
 		return true;
 	}
 	return false;
 }
-
 void UsersAdmins::SignIn(string login, string password)
 {
 	int choise = 0;
@@ -295,10 +291,7 @@ void UsersAdmins::SignIn(string login, string password)
 			int userChoise;
 			do
 			{
-				CLEAR;
-				cout << endl;
-				cout << endl;
-				cout << endl;
+				Clear();
 				cout << "\t\t\tUSER MENU" << endl;
 				cout << "\t\t1. My profile" << endl;
 				cout << "\t\t2. My flights" << endl;
@@ -314,14 +307,11 @@ void UsersAdmins::SignIn(string login, string password)
 				case 1:
 				{
 					int choiseCase1;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
-					cout << "\t\t\tMY PROFILE" << endl;
 					i.Print();
 					do
 					{
+						Clear();
+						cout << "\t\t\tMY PROFILE" << endl;
 						cout << "\t\t1. Change login" << endl;
 						cout << "\t\t2. Change password" << endl;
 						cout << "\t\t3. Go back" << endl;
@@ -333,13 +323,18 @@ void UsersAdmins::SignIn(string login, string password)
 						case 1:
 						{
 							string temp;
-							CLEAR;
-							cout << endl;
-							cout << endl;
-							cout << endl;
+							Clear();
 							cout << "\t\t\tCHANGE LOGIN" << endl;
 							cout << "\t\tEnter password to continue: ";
-							cin >> temp;
+							char ch;
+							ch = _getch();
+							while (ch != 13) {
+
+								temp.push_back(ch);
+								cout << '*';
+								ch = _getch();
+							}							
+							cout << endl;
 							if (i.IsCorrectPassword(temp))
 							{
 								cout << "\t\tEnter new login: ";
@@ -363,19 +358,39 @@ void UsersAdmins::SignIn(string login, string password)
 						{
 							string temp1;
 							string temp2;
-							CLEAR;
-							cout << endl;
-							cout << endl;
-							cout << endl;
+							Clear();
 							cout << "\t\t\tCHANGE PASSWORD" << endl;
 							cout << "\t\tEnter password to continue: ";
-							cin >> temp1;
+							char ch;
+							ch = _getch();
+							while (ch != 13) {
+
+								temp1.push_back(ch);
+								cout << '*';
+								ch = _getch();
+							}
+							cout << endl;
 							if (i.IsCorrectPassword(temp1))
 							{
 								cout << "\t\tEnter new password: ";;
-								cin >> temp1;
+								char ch;
+								ch = _getch();
+								while (ch != 13) {
+
+									temp1.push_back(ch);
+									cout << '*';
+									ch = _getch();
+								}								
+								cout << endl;
 								cout << "\t\tConfirm new password: ";
-								cin >> temp2;
+								ch = _getch();
+								while (ch != 13) {
+
+									temp2.push_back(ch);
+									cout << '*';
+									ch = _getch();
+								}
+								cout << endl;
 								if (temp1 == temp2)
 								{
 									i.SetPassword(temp1);
@@ -385,25 +400,22 @@ void UsersAdmins::SignIn(string login, string password)
 							}
 							break;
 						}
-						
+
 						case 3:
 						{
-							PAUSE;
+							Clear();
 							break;
 						}
 						default:
 							break;
 						}
-					} while (choise != 3);
+					} while (choiseCase1 != 3);
 					break;
 				}
 				case 2:
 				{
 					string choiseCase2;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tMY FLIGHTS" << endl;
 					i.PrintFlights();
 					do
@@ -411,12 +423,12 @@ void UsersAdmins::SignIn(string login, string password)
 						cout << "\t\tDo you want to return any flight?" << endl;
 						cout << "\t\tEnter action(yes / YES / Y / y or no / NO / N / n): ";
 						cin >> choiseCase2;
-					} while (choiseCase2 != "yes" 
-						&& choiseCase2 != "YES" 
-						&& choiseCase2 != "y" 
+					} while (choiseCase2 != "yes"
+						&& choiseCase2 != "YES"
+						&& choiseCase2 != "y"
 						&& choiseCase2 != "Y"
-						&& choiseCase2 != "no" 
-						&& choiseCase2 != "NO" 
+						&& choiseCase2 != "no"
+						&& choiseCase2 != "NO"
 						&& choiseCase2 != "N"
 						&& choiseCase2 != "n");
 					if (choiseCase2 == "yes" || choiseCase2 == "YES" || choiseCase2 == "y" || choiseCase2 == "Y")
@@ -434,10 +446,7 @@ void UsersAdmins::SignIn(string login, string password)
 				case 3:
 				{
 					string choiseCase3;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tMONEY BALANCE" << endl;
 					cout << "\t\tMoney: " << i.GetMoney() << endl;
 					do
@@ -464,10 +473,7 @@ void UsersAdmins::SignIn(string login, string password)
 				}
 				case 4:
 				{
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tSEARCH FLIGHTS" << endl;
 					Date date;
 					string departureCity;
@@ -486,10 +492,7 @@ void UsersAdmins::SignIn(string login, string password)
 				case 5:
 				{
 					string temp;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tDELETE ACCOUNT" << endl;
 					cout << "\t\tEnter password to delete account: ";
 					cin >> temp;
@@ -497,10 +500,9 @@ void UsersAdmins::SignIn(string login, string password)
 					{
 						list<User>::iterator it;
 						int count = 0;
-						for (auto i : users)
+						for (auto j : users)
 						{
-							count++;
-							if (i.GetLogin() == login)
+							if (j.GetLogin() == login)
 							{
 								advance(it, count);
 								users.erase(it);
@@ -508,21 +510,23 @@ void UsersAdmins::SignIn(string login, string password)
 								SLEEP;
 								return;
 							}
+							count++;
 						}
 					}
 					else
 						cout << "\t\tIncorrect password" << endl;
+					break;
 				}
 				case 6:
 				{
 					cout << "\t\tGoodbye!" << endl;
-					PAUSE;;
+					PAUSE;
 					break;
 				}
 				default:
 					break;
 				}
-			} while (choise != 6);
+			} while (userChoise != 6);
 		}
 	}
 	for (auto i : admins)
@@ -532,10 +536,7 @@ void UsersAdmins::SignIn(string login, string password)
 			int adminChoise;
 			do
 			{
-				CLEAR;
-				cout << endl;
-				cout << endl;
-				cout << endl;
+				Clear();
 				cout << "\t\t\tADMIN MENU" << endl;
 				cout << "\t\t1. My profile" << endl;
 				cout << "\t\t2. Add flight" << endl;
@@ -551,10 +552,7 @@ void UsersAdmins::SignIn(string login, string password)
 				case 1:
 				{
 					int choiseCase1;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tMY PROFILE" << endl;
 					i.Print();
 					do
@@ -570,13 +568,18 @@ void UsersAdmins::SignIn(string login, string password)
 						case 1:
 						{
 							string temp;
-							CLEAR;
-							cout << endl;
-							cout << endl;
-							cout << endl;
+							Clear();
 							cout << "\t\t\tCHANGE LOGIN" << endl;
 							cout << "\t\tEnter password to continue: ";
-							cin >> temp;
+							char ch;
+							ch = _getch();
+							while (ch != 13) {
+
+								temp.push_back(ch);
+								cout << '*';
+								ch = _getch();
+							}
+							cout << endl;
 							if (i.IsCorrectPassword(temp))
 							{
 								cout << "\t\tEnter new login: ";
@@ -596,19 +599,39 @@ void UsersAdmins::SignIn(string login, string password)
 						{
 							string temp1;
 							string temp2;
-							CLEAR;
-							cout << endl;
-							cout << endl;
-							cout << endl;
+							Clear();
 							cout << "\t\t\tCHANGE PASSWORD" << endl;
 							cout << "\t\tEnter password to continue: ";
-							cin >> temp1;
+							char ch;
+							ch = _getch();
+							while (ch != 13) {
+
+								temp1.push_back(ch);
+								cout << '*';
+								ch = _getch();
+							}
+								cout << endl;
 							if (i.IsCorrectPassword(temp1))
 							{
 								cout << "\t\tEnter new password: ";;
-								cin >> temp1;
+								ch = _getch();
+								while (ch != 13) {
+
+									temp1.push_back(ch);
+									cout << '*';
+									ch = _getch();
+								}								
+								cout << endl;
 								cout << "\t\tConfirm new password: ";
-								cin >> temp2;
+								char ch;
+								ch = _getch();
+								while (ch != 13) {
+
+									temp2.push_back(ch);
+									cout << '*';
+									ch = _getch();
+								}								
+								cout << endl;
 								if (temp1 == temp2)
 									i.SetPassword(temp1);
 								else
@@ -616,11 +639,13 @@ void UsersAdmins::SignIn(string login, string password)
 							}
 							break;
 						}
-						
+						case 3:
+							PAUSE;
+							break;
 						default:
 							break;
 						}
-					} while (choise != 3);
+					} while (choiseCase1 != 3);
 					break;
 				}
 				case 2:
@@ -630,10 +655,7 @@ void UsersAdmins::SignIn(string login, string password)
 					Date time;
 					int countTickets;
 					int countCF;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tADD FLIGHT" << endl;
 					cout << "\t\tEnter flight name: ";
 					cin >> info;
@@ -725,13 +747,12 @@ void UsersAdmins::SignIn(string login, string password)
 							time1.SetYear();
 							time1.SetMonth();
 							time1.SetDay();
-							
-						}while(time1 < time);
+
+						} while (time1 < time);
 						CF.setTime(time, time1);
 						temp.AddConnectionFlight(CF);
 					}
 					flights.push_back(temp);
-					//rewriteFlightsFile();
 					break;
 				}
 				case 3:
@@ -754,10 +775,7 @@ void UsersAdmins::SignIn(string login, string password)
 						if (j.GetName() == name)
 						{
 							string toChange;
-							CLEAR;
-							cout << endl;
-							cout << endl;
-							cout << endl;
+							Clear();
 							j.Print();
 							cout << endl;
 							do
@@ -767,10 +785,7 @@ void UsersAdmins::SignIn(string login, string password)
 							} while (toChange != "name" && toChange != "company" && toChange != "departure" && toChange != "arrive");
 							if (toChange == "name")
 							{
-								CLEAR;
-								cout << endl;
-								cout << endl;
-								cout << endl;
+								Clear();
 								string newName;
 								cout << "\t\tEnter new name: ";
 								cin >> newName;
@@ -789,10 +804,7 @@ void UsersAdmins::SignIn(string login, string password)
 				{
 					string name;
 					int count = 0;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tDELETE FLIGHT" << endl;
 					for (auto i : flights)
 					{
@@ -802,7 +814,7 @@ void UsersAdmins::SignIn(string login, string password)
 					cin >> name;
 					for (auto i : flights)
 					{
-						count++; 
+						count++;
 						if (i.GetName() == name)
 						{
 							list<Flight>::iterator it;
@@ -820,20 +832,24 @@ void UsersAdmins::SignIn(string login, string password)
 				case 5:
 				{
 					string temp;
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
+					Clear();
 					cout << "\t\t\tDELETE ACCOUNT" << endl;
 					cout << "\t\tEnter password to delete account: ";
-					cin >> temp;
+					char ch;
+					ch = _getch();
+					while (ch != 13) {
+
+						temp.push_back(ch);
+						cout << '*';
+						ch = _getch();
+					}	
+					cout << endl;
 					if (i.IsCorrectPassword(temp))
 					{
 						list<Admin>::iterator it;
 						int count = 0;
 						for (auto i : admins)
 						{
-							count++;
 							if (i.GetLogin() == login)
 							{
 								advance(it, count);
@@ -841,6 +857,7 @@ void UsersAdmins::SignIn(string login, string password)
 								cout << "Account succesfuly deleted" << endl;
 								PAUSE;
 								return;
+							count++;
 							}
 						}
 					}
@@ -849,12 +866,7 @@ void UsersAdmins::SignIn(string login, string password)
 				}
 				case 6:
 				{
-					CLEAR;
-					cout << endl;
-					cout << endl;
-					cout << endl;
-					cout << "\t\tGoodbye" << endl;
-					PAUSE;
+					Clear();
 					break;
 				}
 				default:
@@ -863,7 +875,8 @@ void UsersAdmins::SignIn(string login, string password)
 			} while (adminChoise != 6);
 		}
 	}
-	
+	cout << "\t\tThere is no account with this login" << endl;
+	PAUSE;
 }
 bool UsersAdmins::SignUpUser(string login, string password, float money)
 {
@@ -875,7 +888,7 @@ bool UsersAdmins::SignUpUser(string login, string password, float money)
 	}
 	return false;
 }
-list<User> &UsersAdmins::GetUsers()
+list<User>& UsersAdmins::GetUsers()
 {
 	return users;
 }
@@ -894,6 +907,7 @@ void UsersAdmins::RewriteUsersFile()
 	bool IsOpen = ofs.is_open();
 	if (IsOpen == true)
 	{
+		ofs << users.size();
 		for (auto i : users)
 		{
 			ofs << i;
@@ -910,6 +924,7 @@ void UsersAdmins::RewriteAdminsFile()
 	bool IsOpen = ofs.is_open();
 	if (IsOpen == true)
 	{
+		ofs << admins.size();
 		for (auto i : admins)
 		{
 			ofs << i;
@@ -926,6 +941,7 @@ void UsersAdmins::RewriteFlightsFile()
 	bool IsOpen = ofs.is_open();
 	if (IsOpen == true)
 	{
+		ofs << flights.size();
 		for (auto i : flights)
 		{
 			ofs << i;
@@ -945,7 +961,9 @@ void UsersAdmins::Init()
 	bool IsOpen = ifs.is_open();
 	if (IsOpen == true)
 	{
-		while (!ifs.eof())
+		int size = 0;
+		ifs >> size;
+		for(int i = 0; i < size; i++)
 		{
 			ifs >> temp;
 			users.push_back(temp);
@@ -960,7 +978,9 @@ void UsersAdmins::Init()
 	IsOpen = ifs.is_open();
 	if (IsOpen == true)
 	{
-		while (!ifs.eof())
+		int size = 0;
+		ifs >> size;
+		for (int i = 0; i < size; i++) 
 		{
 			ifs >> temp1;
 			if (!ifs.eof())
@@ -976,7 +996,9 @@ void UsersAdmins::Init()
 	IsOpen = ifs.is_open();
 	if (IsOpen == true)
 	{
-		while (!ifs.eof())
+		int size = 0;
+		ifs >> size;
+		for (int i = 0; i < size; i++) 
 		{
 			ifs >> temp2;
 			if (!ifs.eof())
@@ -1026,7 +1048,7 @@ ifstream& operator>>(ifstream& ifs, User& user)
 }
 ofstream& operator<<(ofstream& ofs, const Admin& admin)
 {
-	ofs <<admin. login << endl;
+	ofs << admin.login << endl;
 	ofs << admin.password << endl;
 	return ofs;
 }
@@ -1037,28 +1059,7 @@ ifstream& operator>>(ifstream& ifs, Admin& admin)
 	return ifs;
 }
 
-
-
-
-//ofstream& operator<<(ofstream& ofs, const UsersAdmins& usersAdmins)
-//{
-//	for (auto i : usersAdmins.users)
-//	{
-//		ofs << i;
-//	}
-//	for (auto i : usersAdmins.admins)
-//	{
-//		ofs << i;
-//	}
-//	return ofs;
-//}
-//
-//ifstream& operator>>(ifstream& ifs, UsersAdmins& usersAdmins)
-//{
-//	for(auto i:usersAdmins.users)
-//}
-
-bool Admin::SetLogin(string login, UsersAdmins&usersAdmins)
+bool Admin::SetLogin(string login, UsersAdmins& usersAdmins)
 {
 	if (usersAdmins.IsAlreadyExist(login) == false)
 	{
