@@ -6,6 +6,8 @@
 #include <ctime>
 using namespace std;
 #pragma warning(disable : 4996) //_CRT_SECURE_NO_WARNINGS
+#define CLEAR system("CLS");
+#define PAUSE system("pause");
 
 struct Date
 {
@@ -46,6 +48,7 @@ public:
 	Ticket() :type(UNKNOWN), value(0), possibleToReturn(false) {}
 	Ticket(TicketType type, float value, bool possibleToReturn)
 		:type(type), value(value), possibleToReturn(possibleToReturn) {}
+	bool IsValid(float value);
 	void setType(TicketType type);
 	void setValue(float value);
 	void setPossibleToReturn(bool possibleToReturn);
@@ -135,9 +138,12 @@ public:
 	bool RemoveTicket(TicketType type);
 	bool IsAvailable(TicketType type)const;
 	bool operator==(const Flight& other);
-	list<Ticket> GetTickets()const;
+	bool operator()(const Flight& other);
+	list<Ticket> GetTickets()/*const*/;
 	list<ConnectionFlight> GetConnectionFlights()const;
 	void Print()const;
 	friend ofstream& operator<<(ofstream& ofs, const Flight& flight);
 	friend ifstream& operator>>(ifstream& ifs, Flight& flight);
+
 };
+

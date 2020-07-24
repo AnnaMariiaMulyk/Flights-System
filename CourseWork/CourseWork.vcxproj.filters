@@ -32,5 +32,13 @@
     <ClInclude Include="Flight.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="admins.txt" />
+    <Text Include="flights.txt" />
+    <Text Include="users.txt" />
   </ItemGroup>
 </Project>

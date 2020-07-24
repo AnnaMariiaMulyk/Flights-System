@@ -144,7 +144,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flight.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="Users.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="admins.txt" />
+    <Text Include="flights.txt" />
+    <Text Include="users.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,7 +1,19 @@
 #include "Flight.h"
 
-void Ticket::setType(TicketType type) { this->type = type; }
-void Ticket::setValue(float value) { this->value = value; }
+bool Ticket::IsValid(float value)
+{
+	return value > 0;
+}
+
+void Ticket::setType(TicketType type) {
+	this->type = type;
+}
+void Ticket::setValue(float value) { 
+	if (IsValid(value))
+	{
+		this->value = value; 
+	}
+}
 void Ticket::setPossibleToReturn(bool possibleToReturn){ this->possibleToReturn = possibleToReturn; }
 TicketType Ticket::getType(){ return type; }
 float Ticket::getValue(){ return value; }
@@ -14,14 +26,14 @@ bool Ticket::operator==(const Ticket& other)
 }
 void Ticket::Print() const
 {
-	cout << "\< - - - - - - - - - - - \>" << endl;
-	cout << "Ticket type: " << type << endl;
-	cout << "Ticket value: " << value << endl;
-	cout << "Possible to return: ";
+	cout << "\t\< - - - - - - - - - - - \>" << endl;
+	cout << "\t\tTicket type: " << type << endl;
+	cout << "\t\tTicket value: " << value << endl;
+	cout << "\t\tPossible to return: ";
 	if (possibleToReturn)
-		cout << "yes" << endl;
+		cout << "\t\tyes" << endl;
 	else
-		cout << "no" << endl;
+		cout << "\t\tno" << endl;
 }
 
 
@@ -78,11 +90,15 @@ void Flight::AddConnectionFlight(const ConnectionFlight& connectionFlight)
 //**********************
 bool Flight::RemoveTicket(TicketType type)
 {
+	int count = 0;
 	for (auto i : tickets)
 	{
+		count++;
 		if (i.getType() == type)
 		{
-			//tickets.remove(i);
+			list<Ticket>::iterator it;
+			advance(it, count);
+			tickets.erase(it);
 			return true;
 		}
 	}
@@ -101,16 +117,20 @@ bool Flight::IsAvailable(TicketType type) const
 }
 bool Flight::operator==(const Flight& other)
 {
-	return (this->name == other.name
-		&& this->company == other.company
-		&& this->departureCity == other.departureCity
-		&& this->arrivalCity == other.arrivalCity
+	return (this->name.compare(other.name) == 0
+		&& this->company.compare(other.company) == 0
+		&& this->departureCity.compare(other.departureCity) == 0
+		&& this->arrivalCity.compare(other.arrivalCity) == 0
 		&& this->departure == other.departure
 		&& this->arrive == other.arrive
 		&& this->tickets.begin() == other.tickets.begin()
 		&& this->connectionFlights.begin() == other.connectionFlights.begin());
 }
-list<Ticket> Flight::GetTickets() const
+bool Flight::operator()(const Flight& other)
+{
+	return (*this == other);
+}
+list<Ticket> Flight::GetTickets() /*const*/
 {
 	return tickets;
 }
@@ -120,11 +140,11 @@ list<ConnectionFlight> Flight::GetConnectionFlights() const
 }
 void Flight::Print() const
 {
-	cout << "\< - - - - - - - - - - - \>" << endl;
-	cout << "Name: " << name << endl;
-	cout << "Company: " << company << endl;
-	cout << "Departure city: " << departureCity << endl;
-	cout << "Arrive city: " << arrivalCity << endl;
+	cout << "\t\< - - - - - - - - - - - \>" << endl;
+	cout << "\t\tName: " << name << endl;
+	cout << "\t\tCompany: " << company << endl;
+	cout << "\t\tDeparture city: " << departureCity << endl;
+	cout << "\t\tArrive city: " << arrivalCity << endl;
 	departure.Print();
 	arrive.Print();
 	for (auto i : tickets)
@@ -148,11 +168,11 @@ Date::Date()
 }
 void Date::SetYear()
 {
-	cout << "Enter year: ";
+	cout << "\t\tEnter year: ";
 	cin >> temp;
 	if (year < (now->tm_year+1900))
 	{
-		cout << "Invalid year!" << endl;
+		cout << "\t\tInvalid year!" << endl;
 		SetYear();
 	}
 	else
@@ -163,11 +183,11 @@ void Date::SetYear()
 }
 void Date::SetMonth()
 {
-	cout << "Enter month: ";
+	cout << "\t\tEnter month: ";
 	cin >> temp;
 	if ((year == 2020 && temp < (now->tm_mon+1)) || temp > 12)
 	{
-		cout << "Invalid month!" << endl;
+		cout << "\t\tInvalid month!" << endl;
 		SetMonth();
 	}
 	else
@@ -178,7 +198,7 @@ void Date::SetMonth()
 }
 void Date::SetDay()
 {
-	cout << "Enter day: ";
+	cout << "\t\tEnter day: ";
 	cin >> temp;
 	if ((month == now->tm_mon && temp < now->tm_mday)
 		|| (month == 1 && temp > 31)
@@ -216,7 +236,7 @@ bool Date::operator<(const Date& other)
 }
 void Date::Print() const
 {
-	cout << hours << "\:" << minutes << "  " << day << "\/" << month << "\/" << year << endl;
+	cout <<"\t\t" << hours << "\:" << minutes << "  " << day << "\/" << month << "\/" << year << endl;
 }
 
 bool Date::operator==(const Date& other)
@@ -335,3 +355,5 @@ ifstream& operator>>(ifstream& ifs, Flight& flight)
 	}
 	return ifs;
 }
+
+
